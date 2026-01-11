@@ -1,52 +1,40 @@
-.header {
-  position: fixed;
+.nav-container {
+  position: sticky;
   top: 0;
-  width: 100%;
-  background: rgba(15, 23, 42, 0.95); /* Dark solid background */
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  z-index: 1000;
-  padding: 1rem 0;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(31, 38, 135, 0.08);
 }
 
-.header.scrolled {
-  background: rgba(15, 23, 42, 0.98); /* Slightly more opaque when scrolled */
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-  padding: 0.75rem 0;
-}
-
-nav {
+.nav-content {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 70px;
 }
 
 .logo {
-  font-size: clamp(1.5rem, 3vw, 2.2rem);
-  font-weight: 900;
-  background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
-  background-size: 200% 200%;
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 1) 0%, rgba(118, 75, 162, 1) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: logoGradient 4s ease infinite;
-  text-shadow: none; /* Clean logo */
-}
-
-@keyframes logoGradient {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  margin-right: 60px;
 }
 
 .nav-links {
   display: flex;
+  gap: 40px;
   list-style: none;
-  gap: 0.5rem;
   margin: 0;
-  padding: 0.5rem 0;
+  padding: 0;
 }
 
 .nav-links li {
@@ -54,53 +42,44 @@ nav {
 }
 
 .nav-links a {
-  display: block;
-  padding: 0.75rem 1.5rem;
-  color: #ffffff !important; /* Pure white - always readable */
+  color: rgba(40, 40, 40, 0.9);
   text-decoration: none;
-  font-weight: 600;
-  font-size: 0.95rem;
-  border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s ease;
   position: relative;
-  overflow: hidden;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); /* Subtle shadow for extra contrast */
 }
 
-.nav-links a::before {
+.nav-links a::after {
   content: '';
   position: absolute;
-  top: 0;
+  bottom: -6px;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border-radius: 12px;
-  z-index: -1;
+  width: 0;
+  height: 2px;
+  background: rgba(102, 126, 234, 1);
+  transition: width 0.3s ease;
 }
 
 .nav-links a:hover {
-  color: #ffffff !important;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+  color: rgba(102, 126, 234, 1);
 }
 
-.nav-links a:hover::before {
-  opacity: 0.2;
+.nav-links a:hover::after {
+  width: 100%;
 }
 
 .nav-links a.active {
-  background: rgba(255, 107, 107, 0.2);
-  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  color: rgba(102, 126, 234, 1);
 }
 
-.nav-links a.active::before {
-  opacity: 0.25;
+.nav-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-left: auto;
 }
 
-/* Mobile hamburger */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -115,7 +94,7 @@ nav {
 .hamburger span {
   width: 25px;
   height: 3px;
-  background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+  background: rgba(102, 126, 234, 1);
   border-radius: 2px;
   transition: all 0.3s ease;
   transform-origin: center;
@@ -140,13 +119,16 @@ nav {
     right: -100%;
     width: 300px;
     height: 100vh;
-    background: rgba(15, 23, 42, 0.98);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     padding-top: 80px;
-    gap: 0;
+    gap: 20px;
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
   }
   
   .nav-links.active {
@@ -173,7 +155,7 @@ nav {
 }
 
 @media (max-width: 480px) {
-  nav {
+  .nav-content {
     padding: 0 15px;
   }
 }

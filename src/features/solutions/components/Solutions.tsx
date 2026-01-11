@@ -1,53 +1,58 @@
 import React from 'react';
 import '../css/Solutions.css';
-import { useSolutions } from '../hooks/useSolutions';
-import { Solution } from '../interfaces';
-
-const solutions: Solution[] = [
-  { 
-    icon: '🚀', 
-    title: 'Custom Software', 
-    description: 'Tailored applications solving unique business challenges with scalable, maintainable architecture.' 
-  },
-  { 
-    icon: '🤖', 
-    title: 'AI & Machine Learning', 
-    description: 'Intelligent systems that learn from data to deliver actionable insights and automation.' 
-  },
-  { 
-    icon: '☁️', 
-    title: 'Cloud Solutions', 
-    description: 'Secure, scalable infrastructure optimized for performance and cost-efficiency.' 
-  },
-  { 
-    icon: '📱', 
-    title: 'Mobile Applications', 
-    description: 'Native & cross-platform experiences for iOS and Android that engage users.' 
-  },
-];
+import { useRadialMenuContext } from '../../contextMenu/RadialMenuContext';
 
 const Solutions: React.FC = () => {
-  const { inView } = useSolutions();
+  const { openMenu } = useRadialMenuContext();
+
+  const solutions = [
+    { id: 1, title: 'Solution 1', description: 'Description here' },
+    { id: 2, title: 'Solution 2', description: 'Description here' },
+    { id: 3, title: 'Solution 3', description: 'Description here' },
+  ];
 
   return (
     <section className="solutions" id="services">
       <div className="container">
-        <h2 className="section-title">Our Solutions</h2>
+        <div className="solutions-header">
+          <h2>Our Solutions</h2>
+          <p className="solutions-subtitle">Innovative solutions tailored for your needs</p>
+        </div>
+
         <div className="solutions-grid">
           {solutions.map((solution, index) => (
             <div 
-              key={index} 
-              className={`solution-card ${inView ? 'visible' : ''}`}
-              style={{ 
-                        '--delay': `${index * 0.1}s` 
-                    } as React.CSSProperties}  // ✅ FIXED
+              key={solution.id}
+              className="solution-card"
+              onContextMenu={(e) => {
+                e.preventDefault();
+                const card = e.currentTarget as HTMLElement;
+                openMenu(e.clientX, e.clientY, `solution-${index}`, () => {
+                  card.remove();
+                });
+              }}
             >
-              <div className="solution-icon">{solution.icon}</div>
               <h3>{solution.title}</h3>
               <p>{solution.description}</p>
+              <button className="glass-button">Learn More</button>
             </div>
           ))}
         </div>
+
+        <button 
+          className="learn-more-btn" 
+          data-context-func={`context-btn-remove-all`}
+          style={{
+            display: 'none',
+            zIndex: -1
+          }}
+          onClick={() => {
+            const grid = document.querySelector('.solutions-grid') as HTMLElement;
+            if (grid) grid.remove();
+          }}
+        >
+          Remove All
+        </button>
       </div>
     </section>
   );

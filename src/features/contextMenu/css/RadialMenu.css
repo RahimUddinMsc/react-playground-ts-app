@@ -1,0 +1,164 @@
+.radial-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(1px);
+  -webkit-backdrop-filter: blur(1px);
+  cursor: pointer;
+  z-index: 999;
+}
+
+.radial-container {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.donut-wrapper {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  overflow: visible;
+}
+
+/* Center Circle - displays hovered item info */
+.radial-center-circle {
+  position: absolute;
+  width: 68px;
+  height: 68px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.radial-center-circle:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.25);
+}
+
+.center-icon {
+  font-size: 26px;
+  color: rgba(102, 126, 234, 1);
+  display: block;
+  line-height: 1;
+  transform: translateY(-2px);
+  text-shadow: 0 4px 8px rgba(102, 126, 234, 0.2);
+}
+
+.center-icon-mini {
+  font-size: 18px;
+}
+
+.center-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(40, 40, 40, 0.85);
+  text-align: center;
+  max-width: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* Donut Ring Segments */
+.donut-segment {
+  transition: all 0.3s ease;
+  fill: rgba(255, 255, 255, 0.15);
+  stroke: rgba(255, 255, 255, 0.185);
+  stroke-width: 1;
+  cursor: pointer;
+}
+
+.donut-segment:hover,
+.donut-segment.hovered {
+  fill: rgba(102, 126, 234, 0.3);
+  stroke: rgba(102, 126, 234, 0.6);
+  filter: drop-shadow(0 0 12px rgba(102, 126, 234, 0.3));
+}
+
+.donut-segment.blurred {
+  transition: all 0.3s ease;
+  transform: scale(0.94);  
+    transform-origin: center;
+}
+
+.donut-segment.hovered {
+  filter: brightness(1.1) drop-shadow(0 0 12px rgba(102, 126, 234, 0.3));
+  transform-origin: center;
+  transform: scale(1.04);
+}
+
+/* Opening animation - items slide in clockwise */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5) rotate(-45deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+.donut-label {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 6;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.label-icon {
+  font-size: 20px;
+  line-height: 1;
+  color: rgba(102, 126, 234, 0.85);
+  filter: drop-shadow(0 2px 4px rgba(102, 126, 234, 0.2));
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.donut-label.blurred {
+  transition: all 0.3s ease;
+}
+
+.donut-label.hovered {
+  z-index: 7;
+  transform: translate(-50%, -50%) scale(1.5);
+  filter: drop-shadow(0 0 16px rgba(102, 126, 234, 0.4));
+}
+
+.donut-label.hovered .label-icon {
+  font-size: 28px;
+  color: rgba(102, 126, 234, 1);
+  text-shadow: 0 2px 12px rgba(102, 126, 234, 0.3);
+  filter: drop-shadow(0 0 12px rgba(102, 126, 234, 0.4));
+}
+
+.donut-ring-svg {
+  z-index: 5;
+  overflow: visible;
+}

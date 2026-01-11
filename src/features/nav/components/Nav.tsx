@@ -24,34 +24,38 @@ const Nav: React.FC = () => {
   }, []);
 
   return (
-    <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
-      <nav>
-        <div className="logo">TechNova</div>
-        
-        <ul className={`nav-links ${mobileOpen ? 'active' : ''}`}>
-          {links.map((link, index) => (
-            <li key={link.href} style={{ animationDelay: `${index * 0.1}s` }}>
-              <a 
-                href={link.href} 
-                className={activeLink === link.href.replace('#', '') ? 'active' : ''}
-                onClick={() => {
-                  setActiveLink(link.href.replace('#', ''));
-                  setMobileOpen(false);
-                }}
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
+    <nav className="nav-container">
+      <div className={`header ${isScrolled ? 'scrolled' : ''}`}>
+        <div className="nav-content">
+          <h2 className="logo">TechNova</h2>
+          <ul className={`nav-links ${mobileOpen ? 'active' : ''}`}>
+            {links.map((link, index) => (
+              <li key={link.href} style={{ animationDelay: `${index * 0.1}s` }}>
+                <a 
+                  href={link.href} 
+                  className={activeLink === link.href.replace('#', '') ? 'active' : ''}
+                  onClick={() => {
+                    setActiveLink(link.href.replace('#', ''));
+                    setMobileOpen(false);
+                  }}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+          <div className="nav-actions">
+            <button className="glass-button">Sign In</button>
+          </div>
+        </div>
         
         <button className={`hamburger ${mobileOpen ? 'active' : ''}`} onClick={toggleMobileMenu}>
           <span></span>
           <span></span>
           <span></span>
         </button>
-      </nav>
-    </header>
+      </div>
+    </nav>
   );
 };
 

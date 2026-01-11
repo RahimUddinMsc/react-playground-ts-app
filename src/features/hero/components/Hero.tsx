@@ -1,28 +1,24 @@
 import React from 'react';
 import '../css/Hero.css';
-import { useHero } from '../hooks/useHero';
 
 const Hero: React.FC = () => {
-  const { isVisible } = useHero();
-
   return (
-    <section className="hero" id="home">
+    <section className="hero" id="hero">
       <div className="hero-bg"></div>
+      
       <div className="hero-content">
-        <div className={`hero-text ${isVisible ? 'visible' : ''}`}>
+        <div className="hero-text visible">
           <h1>
-            Digital <span className="gradient-text">Innovation</span>
-            <br /> Studio
+            Build Amazing <span className="gradient-text">Experiences</span>
           </h1>
-          <p>
-            We craft cutting-edge software solutions that drive business growth 
-            and transform industries. AI, cloud, mobile - we build the future.
-          </p>
+          <p>Create beautiful, interactive applications with modern design patterns and cutting-edge technology.</p>
+          
           <div className="hero-buttons">
-            <a href="#contact" className="cta-primary">Start Project</a>
-            <a href="#services" className="cta-secondary">View Work</a>
+            <button className="cta-primary">Get Started</button>
+            <button className="cta-secondary">Learn More</button>
           </div>
         </div>
+
         <div className="hero-image">
           <div className="floating-shapes">
             <div className="shape shape-1"></div>
