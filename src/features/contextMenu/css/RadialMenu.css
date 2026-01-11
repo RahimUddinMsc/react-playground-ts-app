@@ -86,7 +86,6 @@
 .donut-segment {
   transition: all 0.3s ease;
   fill: rgba(255, 255, 255, 0.15);
-  stroke: rgba(255, 255, 255, 0.185);
   stroke-width: 1;
   cursor: pointer;
 }
@@ -94,14 +93,13 @@
 .donut-segment:hover,
 .donut-segment.hovered {
   fill: rgba(102, 126, 234, 0.3);
-  stroke: rgba(102, 126, 234, 0.6);
   filter: drop-shadow(0 0 12px rgba(102, 126, 234, 0.3));
 }
 
 .donut-segment.blurred {
   transition: all 0.3s ease;
   transform: scale(0.94);  
-    transform-origin: center;
+  transform-origin: center;
 }
 
 .donut-segment.hovered {

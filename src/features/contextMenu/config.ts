@@ -24,14 +24,14 @@ export const radialMenuConfig: RadialMenuItem[] = [
     label: 'Duplicate',
     icon: '📝',    
   },
-//   {
-//     id: 'move-up',
-//     label: 'Move Up',
-//     icon: '⬆️',    
-//   },
-//   {
-//     id: 'move-down',
-//     label: 'Move Down',
-//     icon: '⬇️',    
-//   }
+  {
+    id: 'move-up',
+    label: 'Move Up',
+    icon: '⬆️',    
+  },
+  {
+    id: 'move-down',
+    label: 'Move Down',
+    icon: '⬇️',    
+  }
 ];
