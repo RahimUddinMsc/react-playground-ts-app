@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import '../css/Nav.css';
 import { useNav } from '../hooks/useNav';
-import { NavLink } from '../interfaces';
+import { NavLinks } from '../interfaces';
+import { NavLink } from 'react-router-dom';
 
-const links: NavLink[] = [
-  { href: '#home', label: 'Home' },
-  { href: '#services', label: 'Solutions' },
-  { href: '#about', label: 'About' },
-  { href: '#contact', label: 'Contact' }
+const links: NavLinks[] = [  // Fixed: NavLink → NavLinks (matches your import)
+  { href: '/', label: 'Home' },
+  { href: '/solutions', label: 'Solutions' },
+  { href: '/about', label: 'About' },
+  { href: '/Dashboard', label: 'Dashboard' }
 ];
 
 const Nav: React.FC = () => {
@@ -20,7 +21,7 @@ const Nav: React.FC = () => {
   };
 
   useEffect(() => {
-    return () => setMobileOpen(false); // Close mobile menu on unmount
+    return () => setMobileOpen(false);
   }, []);
 
   return (
@@ -31,16 +32,18 @@ const Nav: React.FC = () => {
           <ul className={`nav-links ${mobileOpen ? 'active' : ''}`}>
             {links.map((link, index) => (
               <li key={link.href} style={{ animationDelay: `${index * 0.1}s` }}>
-                <a 
-                  href={link.href} 
-                  className={activeLink === link.href.replace('#', '') ? 'active' : ''}
+                <NavLink 
+                  to={link.href}  // Changed: href → to
+                  className={({ isActive }) => 
+                    `nav-link ${isActive || activeLink === link.href.replace('/', '') ? 'active' : ''}`
+                  }
                   onClick={() => {
-                    setActiveLink(link.href.replace('#', ''));
+                    setActiveLink(link.href.replace('/', ''));
                     setMobileOpen(false);
                   }}
                 >
                   {link.label}
-                </a>
+                </NavLink>
               </li>
             ))}
           </ul>

@@ -1,0 +1,87 @@
+/* .video-bg-wrapper {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.video-bg {
+  position: fixed;       
+  top: 50%;
+  left: 50%;
+  width: 100%;          
+  height: 100%;         
+  object-fit: cover;     
+  transform: translate(-50%, -50%); 
+  z-index: -2;           
+}
+
+.video-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.397) 0, transparent 40%),
+              rgba(0, 0, 0, 0.096);
+  z-index: -1;
+}
+
+.app-content {
+  position: relative;
+  z-index: 1;
+} */
+.video-bg-wrapper {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.image-bg-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background:
+    /* 🔥 Dark overlay (NEW) */
+    linear-gradient(
+      rgba(0, 0, 0, 0.02),
+      rgba(0, 0, 0, 0.02)
+    ),
+
+    /* Your CRM image */
+    url('/assets/images/type.jpg') center/cover no-repeat,
+
+    /* Accent overlays */
+    radial-gradient(circle at 30% 70%, rgba(100, 150, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 70% 20%, rgba(80, 200, 120, 0.1) 0%, transparent 50%),
+
+    /* Base gradient */
+    linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+
+  animation: slowFloat 25s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes slowFloat {
+  0%, 100% {
+   
+    transform: scale(1.05) translateX(0%) translateY(0%);
+  }
+  33% {
+    transform: scale(1.08) translateX(-1%) translateY(-0.5%);
+  }
+  66% {
+
+    transform: scale(1.06) translateX(1%) translateY(0.5%);
+  }
+}
+
+/* Optional: Parallax on scroll */
+.image-bg-overlay {
+  background-attachment: fixed;
+}
+
+/* Content stays on top */
+.page {
+  position: relative;
+  z-index: 1;
+}

@@ -5,17 +5,31 @@ import { RadialMenuProvider, useRadialMenuContext } from "./features/contextMenu
 import Hero from "./features/hero/components/Hero";
 import Nav from "./features/nav/components/Nav";
 import Solutions from "./features/solutions/components/Solutions";
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Dashboard from './pages/dashboard/Dashboard';
 
 const App = () => {
   return (
+  <BrowserRouter>
     <RadialMenuProvider>
-      <Nav/>
-      <Hero/>
-      <Solutions/>
-      <AppContent />
-
+      <Nav />
+      <Routes>  {/* ← ADD THIS */}
+        {/* Home page route - shows Hero + Solutions */}
+        <Route path="/" element={
+          <>
+            <Hero />
+            <Solutions />
+            <AppContent />
+          </>
+        } />
+        
+        {/* Dashboard route */}
+        <Route path="/Dashboard" element={<Dashboard />} />
+      </Routes>
     </RadialMenuProvider>
-  );
+  </BrowserRouter>
+);
+
 };
 
 const AppContent = () => {
