@@ -18,8 +18,10 @@
   flex-direction: column;
   gap: 1rem;
   padding: 2rem 1rem;
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(25px);
+  /* Clear container for icon-only buttons */
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  backdrop-filter: none;
+  box-shadow: none;
 }

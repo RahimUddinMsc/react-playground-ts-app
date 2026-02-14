@@ -14,6 +14,7 @@ export const useRadialMenu = () => {
     setTargetElementId(elementId);
     setOnItemAction(() => callback || null);
     setIsOpen(true);
+    console.log(`Opening menu for ${elementId} at (${x}, ${y})`);
   }, []);
 
   const closeMenu = useCallback(() => {
@@ -22,16 +23,29 @@ export const useRadialMenu = () => {
   }, []);
 
   const handleItemClick = useCallback((itemId: string) => {
-    const item = radialMenuConfig.find(i => i.id === itemId);
-    if (item && targetElementId) {              
-      if(item.btnActionTriggerSelector) {
+    const findItemById = (items: RadialMenuItem[], id: string): RadialMenuItem | undefined => {
+      for (const it of items) {
+        if (it.id === id) return it;
+        if (it.linkedActions) {
+          const found = findItemById(it.linkedActions, id);
+          if (found) return found;
+        }
+      }
+      return undefined;
+    };
+
+    const item = findItemById(radialMenuConfig, itemId);
+    if (item && targetElementId) {
+      if (item.btnActionTriggerSelector) {
         const button = document.querySelector(`[data-context-func="${item.btnActionTriggerSelector}"]`) as HTMLElement;
-        if (button) 
-          button.click();        
+        if (button) button.click();
       }
 
-      if (onItemAction) 
-        onItemAction();      
+      if (item.contextAction) {
+        try { item.contextAction(); } catch (e) { console.warn('contextAction error', e); }
+      }
+
+      if (onItemAction) onItemAction();
     }
     closeMenu();
   }, [targetElementId, closeMenu]);

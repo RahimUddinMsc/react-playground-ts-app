@@ -1,7 +1,8 @@
 import React from 'react';
 import './css/Dashboard.css';
 import '../../layout/css/Layout.css';
-import ActionPanel from '../../features/dasboard/actions/ActionPanel';
+import ActionPanel from '../../features/dasboard/actions/components/ActionPanel';
+import InfoPanel from '../../features/dasboard/Info/components/InfoPanel';
 const videoPath = '/assets/videos/crm-loop-2.mp4';
 
 const Dashboard: React.FC = () => {
@@ -28,7 +29,7 @@ const Dashboard: React.FC = () => {
       
       <div className="page">
         <main className="content">
-
+          <InfoPanel />
         </main>
           <ActionPanel />
       </div>

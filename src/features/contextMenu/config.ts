@@ -16,13 +16,26 @@ export const radialMenuConfig: RadialMenuItem[] = [
   {
     id: 'delete',
     label: 'Delete',
-    icon: '🗑️',
-    // action: (elementId: string) => console.log(`Move down ${elementId}`)
+    icon: '🗑️',    
   },
   {
     id: 'duplicate',
     label: 'Duplicate',
     icon: '📝',    
+  },
+  {
+    id: 'add',
+    label: 'Add',
+    icon: '＋',
+    linkedActions: [
+      { id: 'add-text', label: 'Text', icon: '🔤' },
+      { id: 'add-image', label: 'Image', icon: '🖼️' },
+      { id: 'add-video', label: 'Video', icon: '🎞️', contextAction: () => console.log(`testing`) },
+      { id: 'add-divider', label: 'Divider', icon: '➖', linkedActions: [
+        { id: 'add-divider-short', label: 'Short', icon: '–' },
+        { id: 'add-divider-long', label: 'Long', icon: '—' }
+      ] }
+    ]
   },
   {
     id: 'move-up',

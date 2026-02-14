@@ -1,6 +1,6 @@
 import React from 'react';
 import { Send, CheckCircle, XCircle } from 'lucide-react';
-import './css/Actions.css';
+import '../css/Actions.css';
 
 const ActionPanel: React.FC = () => {
   return (

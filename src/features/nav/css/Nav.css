@@ -2,11 +2,10 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 16px rgba(31, 38, 135, 0.08);
+  /* transparent nav with subtle separation — no heavy frosted glass */
+  background: transparent;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
 }
 
 .nav-content {
@@ -42,7 +41,7 @@
 }
 
 .nav-links a {
-  color: rgba(40, 40, 40, 0.9);
+  color: rgba(255, 255, 255, 0.95);
   text-decoration: none;
   font-weight: 500;
   font-size: 14px;
@@ -119,16 +118,15 @@
     right: -100%;
     width: 300px;
     height: 100vh;
-    background: rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    /* mobile slide-in uses a dark translucent backdrop (no frosted white) */
+    background: rgba(0, 0, 0, 0.48);
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
     padding-top: 80px;
     gap: 20px;
     transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
   }
   
   .nav-links.active {

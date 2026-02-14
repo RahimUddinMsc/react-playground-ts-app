@@ -10,36 +10,27 @@ import Dashboard from './pages/dashboard/Dashboard';
 
 const App = () => {
   return (
-  <BrowserRouter>
-    <RadialMenuProvider>
-      <Nav />
-      <Routes>  {/* ← ADD THIS */}
-        {/* Home page route - shows Hero + Solutions */}
-        <Route path="/" element={
-          <>
-            <Hero />
-            <Solutions />
-            <AppContent />
-          </>
-        } />
-        
-        {/* Dashboard route */}
-        <Route path="/Dashboard" element={<Dashboard />} />
-      </Routes>
-    </RadialMenuProvider>
-  </BrowserRouter>
-);
-
-};
-
-const AppContent = () => {
-  const { openMenu } = useRadialMenuContext();
-  
-  return (
-    <> 
-      <RadialMenu />
-    </>
-  );
+    <BrowserRouter>
+      <RadialMenuProvider>
+        <Nav />
+        <Routes>  {/* ← ADD THIS */}
+          {/* Home page route - shows Hero + Solutions */}
+          <Route path="/" element={
+            <>
+              <Hero />
+              <Solutions />            
+            </>
+          } />
+          
+          {/* Dashboard route */}
+          <Route path="/Dashboard" element={<Dashboard />} />
+        </Routes>
+        <RadialMenu />
+      </RadialMenuProvider>
+    </BrowserRouter>
+  );  
 };
 
 export default App;
+
+

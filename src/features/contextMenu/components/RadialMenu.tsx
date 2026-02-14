@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { JSX, useState } from 'react';
 import { RadialMenuItem } from '../interfaces';
 import { useRadialMenuContext } from '../RadialMenuContext';
 import '../css/RadialMenu.css';
@@ -12,15 +12,42 @@ const RadialMenu: React.FC = () => {
     closeMenu
   } = useRadialMenuContext();
 
-  const [hoveredItemId, setHoveredItemId] = useState<string | null>(null);
-  const hoveredItem = items.find(item => item.id === hoveredItemId);
+  const [hoveredPath, setHoveredPath] = useState<string[]>([]);
+  const hoveredItemId = hoveredPath[hoveredPath.length - 1] || null;
+  
+  const findItemById = (list: RadialMenuItem[], id?: string): RadialMenuItem | undefined => {
+    if (!id) return undefined;
+    for (const it of list) {
+      if (it.id === id) return it;
+      if (it.linkedActions) {
+        const found = findItemById(it.linkedActions, id);
+        if (found) return found;
+      }
+    }
+    return undefined;
+  };
+  
+  const hoveredItem = findItemById(items, hoveredItemId || undefined);
 
   if (!isOpen) return null;
 
-  const donutInnerRadius = 45;
-  const donutOuterRadius = 95;
-  const itemCount = items.length;
-  const distance = (donutInnerRadius + donutOuterRadius) / 2;
+  const baseInner = 45;
+  const ringThickness = 50; // thickness of each ring
+  const ringMargin = 10; // desired margin between rings (user requested ~6px)
+
+  const getMaxDepth = (list: RadialMenuItem[]): number => {
+    let max = 0;
+    for (const it of list) {
+      if (it.linkedActions) {
+        const childDepth = 1 + getMaxDepth(it.linkedActions);
+        if (childDepth > max) max = childDepth;
+      }
+    }
+    return max;
+  };
+
+  const maxDepth = getMaxDepth(items);
+  const outerMost = baseInner + maxDepth * (ringThickness + ringMargin) + ringThickness;
 
   return (
     <>
@@ -31,13 +58,13 @@ const RadialMenu: React.FC = () => {
       />
       
       {/* Main Container */}
-      <div 
+      <div
         className="radial-container"
         style={{
-          left: `${position.x - donutOuterRadius}px`,
-          top: `${position.y - donutOuterRadius}px`,
-          width: `${donutOuterRadius * 2}px`,
-          height: `${donutOuterRadius * 2}px`
+          left: `${position.x - outerMost}px`,
+          top: `${position.y - outerMost}px`,
+          width: `${outerMost * 2}px`,
+          height: `${outerMost * 2}px`
         }}
       >
         {/* Center Circle - displays hovered item text */}
@@ -63,102 +90,109 @@ const RadialMenu: React.FC = () => {
           )}
         </div>
 
-<svg 
-  className="donut-ring-svg"
-  style={{
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    left: 0,
-    top: 0
-  }}
-  viewBox={`0 0 ${donutOuterRadius * 2} ${donutOuterRadius * 2}`}
->
-  {items.map((item: RadialMenuItem, index: number) => {
-    const isHovered = hoveredItemId === item.id;
-    
-    // 1. Define your gap width in pixels
-    const gapPx = 6; 
+        <svg
+          className="donut-ring-svg"
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            left: 0,
+            top: 0
+          }}
+          viewBox={`0 0 ${outerMost * 2} ${outerMost * 2}`}
+        >
+          {
+            // recursive ring renderer
+            (() => {
+              const rings: JSX.Element[] = [];
 
-    // 2. Calculate base angles
-    const startAngle = (index / itemCount) * 360;
-    const endAngle = ((index + 1) / itemCount) * 360;
-    const startRad = (startAngle * Math.PI) / 180;
-    const endRad = (endAngle * Math.PI) / 180;
+              const renderRing = (
+                list: RadialMenuItem[],
+                depth: number,
+                parentPath: string[]
+              ) => {
+                const inner = baseInner + depth * (ringThickness + ringMargin);
+                const outer = inner + ringThickness;
+                const itemCountLocal = list.length;
+                const distanceLocal = (inner + outer) / 2;
+                const gapPx = 6;
 
-    // 3. New Math: Calculate offsets for parallel edges
-    // The offset angle must be larger at the inner radius than the outer radius
-    const innerOffset = Math.asin(gapPx / (2 * donutInnerRadius));
-    const outerOffset = Math.asin(gapPx / (2 * donutOuterRadius));
+                list.forEach((item, idx) => {
+                  const startAngle = (idx / itemCountLocal) * 360;
+                  const endAngle = ((idx + 1) / itemCountLocal) * 360;
+                  const startRad = (startAngle * Math.PI) / 180;
+                  const endRad = (endAngle * Math.PI) / 180;
+                  const innerOffset = Math.asin(gapPx / (2 * Math.max(8, inner)));
+                  const outerOffset = Math.asin(gapPx / (2 * Math.max(8, outer)));
 
-    // 4. Update coordinates with specific offsets
-    const x1Inner = donutOuterRadius + donutInnerRadius * Math.cos(startRad + innerOffset);
-    const y1Inner = donutOuterRadius + donutInnerRadius * Math.sin(startRad + innerOffset);
-    const x2Inner = donutOuterRadius + donutInnerRadius * Math.cos(endRad - innerOffset);
-    const y2Inner = donutOuterRadius + donutInnerRadius * Math.sin(endRad - innerOffset);
+                  const cx = outerMost;
+                  const cy = outerMost;
 
-    const x1Outer = donutOuterRadius + donutOuterRadius * Math.cos(startRad + outerOffset);
-    const y1Outer = donutOuterRadius + donutOuterRadius * Math.sin(startRad + outerOffset);
-    const x2Outer = donutOuterRadius + donutOuterRadius * Math.cos(endRad - outerOffset);
-    const y2Outer = donutOuterRadius + donutOuterRadius * Math.sin(endRad - outerOffset);
+                  const x1Inner = cx + inner * Math.cos(startRad + innerOffset);
+                  const y1Inner = cy + inner * Math.sin(startRad + innerOffset);
+                  const x2Inner = cx + inner * Math.cos(endRad - innerOffset);
+                  const y2Inner = cy + inner * Math.sin(endRad - innerOffset);
 
-    const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+                  const x1Outer = cx + outer * Math.cos(startRad + outerOffset);
+                  const y1Outer = cy + outer * Math.sin(startRad + outerOffset);
+                  const x2Outer = cx + outer * Math.cos(endRad - outerOffset);
+                  const y2Outer = cy + outer * Math.sin(endRad - outerOffset);
 
-    const pathData = `
-      M ${x1Inner} ${y1Inner}
-      L ${x1Outer} ${y1Outer}
-      A ${donutOuterRadius} ${donutOuterRadius} 0 ${largeArc} 1 ${x2Outer} ${y2Outer}
-      L ${x2Inner} ${y2Inner}
-      A ${donutInnerRadius} ${donutInnerRadius} 0 ${largeArc} 0 ${x1Inner} ${y1Inner}
-      Z
-    `;
+                  const largeArc = endAngle - startAngle > 180 ? 1 : 0;
 
-    return (
-      <path
-        key={item.id}
-        d={pathData}
-        className={`donut-segment ${isHovered ? 'hovered' : ''} ${hoveredItemId && !isHovered ? 'blurred' : ''}`}
-        fill={isHovered ? 'rgba(118, 75, 162, 0.9)' : 'rgba(102, 126, 234, 0.6)'}
-        stroke="rgba(255, 255, 255, 0.2)"
-        strokeWidth="1"
-        onMouseEnter={() => setHoveredItemId(item.id)}
-        onMouseLeave={() => setHoveredItemId(null)}
-        onClick={() => handleItemClick(item.id)}
-        style={{ 
-          cursor: 'pointer',
-          animation: `slideIn 0.3s ease-out ${index * 0.08}s backwards`
-        }}
-      />
-    );
-  })}
-</svg>
+                  const pathData = `M ${x1Inner} ${y1Inner} L ${x1Outer} ${y1Outer} A ${outer} ${outer} 0 ${largeArc} 1 ${x2Outer} ${y2Outer} L ${x2Inner} ${y2Inner} A ${inner} ${inner} 0 ${largeArc} 0 ${x1Inner} ${y1Inner} Z`;
 
-{/* Item labels positioned in donut */}
-{items.map((item: RadialMenuItem, index: number) => {
-  const angle = ((index + 0.5) / itemCount) * Math.PI * 2;
-  const x = Math.cos(angle) * distance;
-  const y = Math.sin(angle) * distance;
-  const isHovered = hoveredItemId === item.id;
+                  const currentPath = [...parentPath, item.id];
+                  const isHoveredHere = hoveredPath[depth] === item.id && hoveredPath.length > depth;
+                  const isDimmed = hoveredPath.length > 0 && !(hoveredPath[depth] === item.id);
 
-  return (
-    <div
-      key={`label-${item.id}`}
-      className={`donut-label ${isHovered ? 'hovered' : ''} ${hoveredItemId && !isHovered ? 'blurred' : ''}`}
-      style={{
-        left: `calc(50% + ${x}px)`,
-        top: `calc(50% + ${y}px)`,
-        transform: `translate(-50%, -50%)`,
-        position: 'absolute', // Added to ensure correct alignment
-        pointerEvents: 'none', // Prevents label from blocking SVG hover
-        animation: `slideIn 0.5s ease-out ${index * 0.08}s backwards`
-      }}
-      onMouseEnter={() => setHoveredItemId(item.id)}
-      onMouseLeave={() => setHoveredItemId(null)}
-    >
-      <span className="label-icon">{item.icon}</span>
-    </div>
-  );
-})}
+                  rings.push(
+                    <path
+                      key={`ring-${depth}-${item.id}`}
+                      d={pathData}
+                      className={`donut-segment ${isHoveredHere ? 'hovered' : ''} ${isDimmed ? 'blurred' : ''}`}
+                      fill={isHoveredHere ? 'rgba(118, 75, 162, 0.9)' : 'rgba(102, 126, 234, 0.6)'}
+                      stroke="rgba(255, 255, 255, 0.12)"
+                      strokeWidth="1"
+                      onMouseEnter={() => setHoveredPath(currentPath)}
+                      onMouseLeave={() => setHoveredPath(parentPath)}
+                      onClick={() => handleItemClick(item.id)}
+                      style={{ cursor: 'pointer', animation: `slideIn 0.3s ease-out ${idx * 0.06}s backwards` }}
+                    />
+                  );
+
+                  // label
+                  const angle = ((idx + 0.5) / itemCountLocal) * Math.PI * 2;
+                  const lx = Math.cos(angle) * distanceLocal;
+                  const ly = Math.sin(angle) * distanceLocal;
+
+                  rings.push(
+                    <foreignObject
+                      key={`label-${depth}-${item.id}`}
+                      x={cx + lx - 18}
+                      y={cy + ly - 10}
+                      width={36}
+                      height={20}
+                      style={{ pointerEvents: 'none', overflow: 'visible' }}
+                    >
+                      <div className={`donut-label ${isHoveredHere ? 'hovered' : ''} ${isDimmed ? 'blurred' : ''}`} style={{ textAlign: 'center' }}>
+                        <span className="label-icon">{item.icon}</span>
+                      </div>
+                    </foreignObject>
+                  );
+
+                  // recursively render children if hovered
+                  if (item.linkedActions && hoveredPath[depth] === item.id) {
+                    renderRing(item.linkedActions, depth + 1, currentPath);
+                  }
+                });
+              };
+
+              renderRing(items, 0, []);
+              return rings;
+            })()
+          }
+        </svg>
       </div>
     </>
   );
