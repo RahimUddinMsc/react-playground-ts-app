@@ -1,8 +1,9 @@
 import React from 'react';
 import './css/Dashboard.css';
 import '../../layout/css/Layout.css';
-import ActionPanel from '../../features/dasboard/actions/components/ActionPanel';
-import InfoPanel from '../../features/dasboard/Info/components/InfoPanel';
+import InfoPanel from '../../features/dashboard/Info/components/InfoPanel';
+import ActionPanel from '../../features/dashboard/actions/components/ActionPanel';
+
 const videoPath = '/assets/videos/crm-loop-2.mp4';
 
 const Dashboard: React.FC = () => {

@@ -1,9 +1,11 @@
 import React from 'react';  
 import '../css/info.css';
-import { useRadialMenuContext } from '../../../contextMenu/RadialMenuContext';
+import { useRadialMenuContext } from '../../../radialContextMenu/RadialMenuContext';
+import { useListMenuContext } from '../../../listContextMenu/ListMenuContext';
+
 
 const InfoPanel = () => {
-     const { openMenu } = useRadialMenuContext();
+     const { openMenu } = useListMenuContext();
 
 
     return <>

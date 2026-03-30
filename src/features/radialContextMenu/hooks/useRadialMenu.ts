@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { RadialMenuItem } from '../interfaces';
-import { radialMenuConfig } from '../config';
+import { radialMenuConfig } from '../radialMenuConfig';
 
 export const useRadialMenu = () => {
   const [isOpen, setIsOpen] = useState(false);

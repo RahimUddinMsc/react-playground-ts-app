@@ -1,6 +1,7 @@
 import React from 'react';
 import '../css/Solutions.css';
-import { useRadialMenuContext } from '../../contextMenu/RadialMenuContext';
+import { useRadialMenuContext } from '../../radialContextMenu/RadialMenuContext';
+
 
 const Solutions: React.FC = () => {
   const { openMenu } = useRadialMenuContext();
